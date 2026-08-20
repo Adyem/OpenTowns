@@ -47,13 +47,14 @@ import xaos.zones.ZoneManagerItem;
  */
 public final class GameCommandShell {
 
-    private final World world;
+    private World world;
     private long ticksAdvanced;
     private boolean exitRequested;
     private Point3D cachedVillageOrigin;
     private Point3D cachedStoneColumn;
     private boolean villageSoilQueued;
     private boolean villageSeedsQueued;
+    private int lastTaskId = -1;
 
     public GameCommandShell(World world) {
         if (world == null) {
@@ -119,6 +120,8 @@ public final class GameCommandShell {
                 case "tasks":
                     require(words, 1, "tasks");
                     return tasks();
+                case "why":
+                    return why(words);
                 case "queues":
                 case "actions-queued":
                     return queues(words);
@@ -211,8 +214,38 @@ public final class GameCommandShell {
         return exitRequested;
     }
 
+    public World getWorld() {
+        return world;
+    }
+
     public long getTicksAdvanced() {
         return ticksAdvanced;
+    }
+
+    public void setTicksAdvanced(long ticks) {
+        if (ticks < 0) throw new IllegalArgumentException("ticks must not be negative");
+        ticksAdvanced = ticks;
+    }
+
+    public int getLastTaskId() {
+        return lastTaskId;
+    }
+
+    /** Rebinds the shell after a headless checkpoint load. */
+    public void reloadWorld(World replacement) {
+        if (replacement == null) {
+            throw new IllegalArgumentException("replacement world must not be null");
+        }
+        // A loaded world is a new simulation epoch; command-local caches must
+        // not leak coordinates or setup state from the previous epoch.
+        cachedVillageOrigin = null;
+        cachedStoneColumn = null;
+        villageSoilQueued = false;
+        villageSeedsQueued = false;
+        lastTaskId = -1;
+        world = replacement;
+        ticksAdvanced = 0;
+        exitRequested = false;
     }
 
     private CommandResult tick(List<String> words) {
@@ -389,6 +422,20 @@ public final class GameCommandShell {
         appendTasks(result, world.getTaskManager().getTaskItems());
         appendTasks(result, world.getTaskManager().getTaskItemsTemp());
         return success(result.length() == 0 ? "no tasks" : result.toString().trim());
+    }
+
+    private CommandResult why(List<String> words) {
+        if (words.size() != 2) throw new IllegalArgumentException("usage: why task-or-action-id");
+        String requested = words.get(1);
+        String taskText = tasks().getMessage();
+        for (String line : taskText.split("\\n")) {
+            if (line.contains("id=" + requested + " ")) {
+                return success("id=" + requested + " state=pending blocker=unknown detail=" + line);
+            }
+        }
+        String queueText = queues(List.of("queues", requested)).getMessage();
+        if (!queueText.equals("no queued actions")) return success("id=" + requested + " state=queued blocker=unknown detail=" + queueText);
+        return failure("no task or action found: " + requested);
     }
 
     private CommandResult queues(List<String> words) {
@@ -1168,12 +1215,14 @@ public final class GameCommandShell {
         if (task == null) {
             return null;
         }
+        lastTaskId = task.getID();
         if (parameter != null) {
             task.setParameter(parameter);
             task = Game.getCurrentTask();
             if (task == null) {
                 return null;
             }
+            lastTaskId = task.getID();
         }
         if (parameter2 != null) {
             task.setParameter2(parameter2);
@@ -1181,6 +1230,7 @@ public final class GameCommandShell {
             if (task == null) {
                 return null;
             }
+            lastTaskId = task.getID();
         }
 
         if (task.getState() == Task.STATE_CREATED) {
@@ -1272,7 +1322,7 @@ public final class GameCommandShell {
     }
 
     private static String helpText() {
-        return "commands: commands, status/world, cell x y z, livings [id], items [id], tasks, queues [action-id|summary], progress, buildings, zones, stockpiles, "
+        return "commands: " + String.join(", ", CommandRegistry.humanCommands()) + ". Syntax: status/world, cell x y z, livings [id], items [id], tasks, why task-or-action-id, queues [action-id|summary], progress, buildings, zones, stockpiles, "
                 + "hash, origin, tick [count], setup village [x y z|status|auto [cycles]], food-ready, order task-name [parameter] [parameter2] [x y z [x2 y2 z2]], "
                 + "save name, pause, resume, quit. Shortcuts: mine, mine-area, dig, build, stockpile, village. "
                 + "Use 'commands' for task names and syntax.";

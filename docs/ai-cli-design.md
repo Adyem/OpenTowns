@@ -79,8 +79,21 @@ Errors include a stable code, the offending field, relevant constraints, and opt
 Keep the existing invocation unchanged and add a protocol selection:
 
 ```powershell
-.\gradlew runHeadless -Pseed=42 -Pprotocol=json -Pinteractive=true
+.\gradlew runHeadless -Pseed=42 -Pprotocol=json -Pinteractive=true -Pmode=test
 ```
+
+JSON sessions may record canonical request/response exchanges and replay them
+against a deterministic world:
+
+```powershell
+.\gradlew runHeadless -Pseed=42 -Pprotocol=json -Pinteractive=true -Ptranscript=tmp\session.ndjson
+.\gradlew runHeadless -Pseed=42 -Preplay=tmp\session.ndjson
+```
+
+The protocol exposes `play`, `test`, and `debug` modes through `-Pmode`; normal
+player actions remain available in every mode, while assertions and checkpoints
+are restricted to test/debug sessions. Direct debug mutation is not enabled by
+this implementation.
 
 Also accept `--protocol=json` directly. Standard input contains one JSON object per line and standard output contains exactly one response object per request, plus explicitly typed asynchronous events when requested. Diagnostics and JVM/game logs go to standard error in machine mode.
 

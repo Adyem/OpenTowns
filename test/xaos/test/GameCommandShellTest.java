@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
+import java.nio.file.Files;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -109,5 +111,52 @@ class GameCommandShellTest {
         assertTrue(observation.contains("\"summary\""));
         String assertion = protocol.execute("{\"id\":\"a1\",\"op\":\"assert\",\"args\":{\"condition\":{\"path\":\"summary.citizens\",\"op\":\"gte\",\"value\":0}}}");
         assertTrue(assertion.contains("\"passed\":true"), assertion);
+    }
+
+    @Test
+    void jsonProtocolKeepsFramingAfterMalformedInputAndSupportsRevisionGuards() {
+        GameCommandProtocol protocol = new GameCommandProtocol(shell);
+        String malformed = protocol.execute("{not-json");
+        assertTrue(malformed.contains("\"ok\":false"));
+        String next = protocol.execute("{\"id\":\"next\",\"op\":\"capabilities\"}");
+        assertTrue(next.contains("\"id\":\"next\""));
+        String stale = protocol.execute("{\"id\":\"stale\",\"op\":\"observe\",\"if_revision\":999}");
+        assertTrue(stale.contains("STALE_REVISION"), stale);
+    }
+
+    @Test
+    void jsonProtocolRecordsCanonicalTranscript() throws Exception {
+        Path transcript = Files.createTempFile("opentowns-protocol-", ".ndjson");
+        GameCommandProtocol protocol = new GameCommandProtocol(shell, transcript);
+        protocol.execute("{\"id\":\"t1\",\"op\":\"capabilities\"}");
+        protocol.closeTranscript();
+        assertTrue(Files.readAllLines(transcript).size() >= 3);
+        Files.deleteIfExists(transcript);
+    }
+
+    @Test
+    void jsonObservationUsesTypedSpatialRecordsAndEventConditions() {
+        GameCommandProtocol protocol = new GameCommandProtocol(shell);
+        LivingEntity citizen = World.getLivingEntityByID(World.getCitizenIDs().get(0));
+        int x=citizen.getCoordinates().x, y=citizen.getCoordinates().y, z=citizen.getCoordinates().z;
+        String request = "{\"id\":\"spatial\",\"op\":\"observe\",\"args\":{\"include\":[\"citizens\"],\"near\":{\"x\":"+x+",\"y\":"+y+",\"z\":"+z+",\"radius\":0}}}";
+        String observation=protocol.execute(request);
+        assertTrue(observation.contains("\"position\""), observation);
+        String action=protocol.execute("{\"id\":\"tagged\",\"op\":\"act\",\"args\":{\"action\":\"mine\",\"target\":{\"x\":"+x+",\"y\":"+y+",\"z\":"+z+"},\"client_tag\":\"probe\",\"dry_run\":true}}");
+        assertTrue(action.contains("\"dry_run\":true"), action);
+    }
+
+    @Test
+    void jsonObservationRetainsTypedRevisionDeltas() {
+        GameCommandProtocol protocol = new GameCommandProtocol(shell);
+        String first = protocol.execute("{\"id\":\"full\",\"op\":\"observe\",\"args\":{\"include\":[\"citizens\"]}}");
+        Map<?,?> firstEnvelope=(Map<?,?>)GameCommandProtocol.parseJson(first);
+        long revision=((Number)firstEnvelope.get("revision")).longValue();
+        protocol.execute("{\"id\":\"advance\",\"op\":\"advance\",\"args\":{\"max_ticks\":1}}");
+        String changed=protocol.execute("{\"id\":\"delta\",\"op\":\"observe\",\"args\":{\"include\":[\"citizens\"],\"since_revision\":"+revision+"}}");
+        assertTrue(changed.contains("\"from_revision\":"+revision), changed);
+        assertTrue(changed.contains("\"added\""), changed);
+        assertTrue(changed.contains("\"updated\""), changed);
+        assertTrue(changed.contains("\"removed\""), changed);
     }
 }

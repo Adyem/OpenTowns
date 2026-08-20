@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,9 @@ public final class TownsHeadless {
         String scriptName = null;
         boolean interactive = false;
         boolean jsonProtocol = false;
+        String transcriptName = null;
+        String replayName = null;
+        String protocolMode = "test";
 
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
@@ -102,6 +106,15 @@ public final class TownsHeadless {
             } else if (arg.equals("--protocol=json")) {
                 jsonProtocol = true;
                 interactive = true;
+            } else if (arg.equals("--protocol=text")) {
+                // Explicit text mode is accepted for callers that always pass
+                // a protocol selector; text remains the migration default.
+            } else if (arg.startsWith("--transcript=")) {
+                transcriptName = arg.substring("--transcript=".length());
+            } else if (arg.startsWith("--replay=")) {
+                replayName = arg.substring("--replay=".length());
+            } else if (arg.startsWith("--mode=")) {
+                protocolMode = arg.substring("--mode=".length());
             } else {
                 System.err.println("Unknown argument: " + arg);
                 System.err.println("Usage: xaos.TownsHeadless [--seed=N] [--ticks=N] [--map=type] [--user-folder=path] [--save=name] [--load=name] [--commands=...|--script=file|--interactive] [--protocol=json] [--post-commands=...]");
@@ -131,7 +144,7 @@ public final class TownsHeadless {
             Utils.setRandomSeed(seed.longValue());
         }
 
-        boolean commandMode = !commands.isEmpty() || scriptName != null || interactive || !postCommands.isEmpty();
+        boolean commandMode = !commands.isEmpty() || scriptName != null || interactive || replayName != null || !postCommands.isEmpty();
         String tickDescription = commandMode && !ticksSpecified ? "command" : Long.toString(ticks);
         System.out.println("[TownsHeadless] seed=" + (seed != null ? seed.toString() : "none") + " ticks=" + tickDescription + " map=" + map);
 
@@ -156,6 +169,7 @@ public final class TownsHeadless {
 
         if (commandMode) {
             GameCommandShell shell = new GameCommandShell(world);
+            GameCommandProtocol protocol = jsonProtocol ? new GameCommandProtocol(shell, transcriptName == null ? null : Path.of(transcriptName), protocolMode, seed == null ? "none" : seed.toString()) : null;
             if (scriptName != null && !runScript(shell, Path.of(scriptName))) {
                 Game.exit();
                 System.exit(1);
@@ -169,9 +183,14 @@ public final class TownsHeadless {
                     break;
                 }
             }
+            if (replayName != null && !shell.isExitRequested()) {
+                if (!runReplay(protocol == null ? new GameCommandProtocol(shell) : protocol, Path.of(replayName))) {
+                    Game.exit(); System.exit(1);
+                }
+            }
             if (interactive && !shell.isExitRequested()) {
                 if (jsonProtocol) {
-                    runJsonInteractive(shell, protocolOutput);
+                    runJsonInteractive(protocol, protocolOutput);
                 } else {
                     runInteractive(shell);
                 }
@@ -194,6 +213,7 @@ public final class TownsHeadless {
                 }
             }
             System.out.println("[TownsHeadless] command mode complete (" + shell.getTicksAdvanced() + " ticks advanced)");
+            if (protocol != null) protocol.closeTranscript();
         } else {
             lTime = System.currentTimeMillis();
             for (long i = 0; i < ticks; i++) {
@@ -264,11 +284,10 @@ public final class TownsHeadless {
         }
     }
 
-    private static void runJsonInteractive(GameCommandShell shell, PrintStream output) {
-        GameCommandProtocol protocol = new GameCommandProtocol(shell);
+    private static void runJsonInteractive(GameCommandProtocol protocol, PrintStream output) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             String line;
-            while (!shell.isExitRequested() && (line = reader.readLine()) != null) {
+            while (!protocol.isExitRequested() && (line = reader.readLine()) != null) {
                 output.println(protocol.execute(line));
                 output.flush();
             }
@@ -276,6 +295,47 @@ public final class TownsHeadless {
             // stdout must remain valid NDJSON; diagnostics are on stderr.
             System.err.println("[TownsHeadless] JSON input failed: " + e.getMessage());
         }
+    }
+
+    private static boolean runReplay(GameCommandProtocol protocol, Path transcript) {
+        try {
+            String expectedFinalHash = null;
+            for (String line : Files.readAllLines(transcript)) {
+                Object parsed = GameCommandProtocol.parseJson(line);
+                if (!(parsed instanceof Map)) continue;
+                Map<?,?> record = (Map<?,?>) parsed;
+                if ("footer".equals(record.get("record"))) { expectedFinalHash = String.valueOf(record.get("state_hash")); continue; }
+                if (!"exchange".equals(record.get("record"))) continue;
+                String request = String.valueOf(record.get("request"));
+                String actual = protocol.execute(request);
+                Object expectedResponse = record.get("response");
+                Object actualResponse = GameCommandProtocol.parseJson(actual);
+                if (!sameReplayShape(expectedResponse, actualResponse)) {
+                    System.err.println("[TownsHeadless] replay mismatch for request " + request);
+                    return false;
+                }
+            }
+            if (expectedFinalHash != null && !expectedFinalHash.equals(Long.toHexString(computeStateHash()))) {
+                System.err.println("[TownsHeadless] replay final state hash mismatch");
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("[TownsHeadless] replay failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static boolean sameReplayShape(Object expected, Object actual) {
+        if (!(expected instanceof Map) || !(actual instanceof Map)) return false;
+        Map<?,?> e=(Map<?,?>)expected, a=(Map<?,?>)actual;
+        if (!java.util.Objects.equals(e.get("ok"), a.get("ok"))) return false;
+        if (e.get("result") instanceof Map && a.get("result") instanceof Map) {
+            Map<?,?> er=(Map<?,?>)e.get("result"), ar=(Map<?,?>)a.get("result");
+            for (String key : new String[]{"terminal_reason","state_hash","ticks_advanced"})
+                if (er.containsKey(key) && !java.util.Objects.equals(er.get(key), ar.get(key))) return false;
+        }
+        return true;
     }
 
     private static void addCommands(List<String> commands, String value) {

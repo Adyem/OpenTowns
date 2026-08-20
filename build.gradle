@@ -59,6 +59,7 @@ if (osName.contains('win')) {
 }
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
     // The same libraries the Steam install vendored, sourced from Maven
     // Central so a bare checkout compiles (src/lib is gitignored). JNA is
     // the Steam API binding (optional at runtime, failure ignored); the
@@ -163,6 +164,15 @@ tasks.register('runHeadless', JavaExec) {
     if (project.findProperty('protocol')?.toString()?.equalsIgnoreCase('json')) {
         args '--protocol=json'
         standardInput = System.in
+    }
+    if (project.hasProperty('transcript')) {
+        args "--transcript=${project.property('transcript')}"
+    }
+    if (project.hasProperty('replay')) {
+        args "--replay=${project.property('replay')}"
+    }
+    if (project.hasProperty('mode')) {
+        args "--mode=${project.property('mode')}"
     }
 }
 

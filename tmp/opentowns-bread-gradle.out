@@ -1,0 +1,118 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.14.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :compileJava UP-TO-DATE
+> Task :processResources NO-SOURCE
+> Task :classes UP-TO-DATE
+
+> Task :run
+[TownsCLI] windowed console enabled; start or load a game, then type 'help'.
+[Aug 11, 2026, 12:05:31?PM][UtilsServer] Server error [java.net.SocketTimeoutException: Connect timed out]
+[TownsCLI] game ready; type 'help' for commands.
+[TownsCLI] OK date=17/1/1 citizens=8 livings=6767 items=2650 coins=67 view=146,14,13 floors=16 speed=3 paused=false ticks=0
+[TownsCLI] OK automated action=qharvestwheat minimum=10
+[TownsCLI] OK automated action=qflour minimum=10
+[TownsCLI] OK automated action=qbread minimum=10
+[TownsCLI] OK date=17/1/1 citizens=8 livings=6767 items=2650 coins=67 view=146,14,13 floors=16 speed=3 paused=false ticks=0
+[TownsCLI] OK cell=122,10,13 terrain=3 fluidType=0 fluidCount=0 mined=false discovered=false empty=true orders=false patrol=false
+[TownsCLI] OK cell=131,19,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=122,21,13 terrain=3 fluidType=0 fluidCount=0 mined=false discovered=false empty=true orders=false patrol=false
+[TownsCLI] OK cell=131,30,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=132,21,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=140,30,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=131,21,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=140,30,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=142,22,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=144,28,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=false orders=false patrol=false entity=plantedharvestedappletree#12211@144,28,13 item=plantedharvestedappletree#12211@144,28,13
+[TownsCLI] OK cell=128,21,13 terrain=2 fluidType=0 fluidCount=0 mined=false discovered=false empty=true orders=false patrol=false
+[TownsCLI] OK cell=129,25,13 terrain=3 fluidType=0 fluidCount=0 mined=false discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=145,22,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=146,26,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=false orders=false patrol=false entity=plantedharvestedappletree#12379@146,26,13 item=plantedharvestedappletree#12379@146,26,13
+[TownsCLI] ERROR order was rejected
+[TownsCLI] ERROR order was rejected
+[TownsCLI] OK order accepted task=queue-place-area
+[TownsCLI] OK no tasks
+[TownsCLI] OK item id=12739 type=wheatseed pos=132,11,13 locked=true
+item id=12740 type=wheatseed pos=132,10,13 locked=true
+item id=12741 type=wheatseed pos=132,12,13 locked=true
+item id=12742 type=wheatseed pos=132,14,13 locked=true
+item id=12743 type=wheatseed pos=132,13,13 locked=true
+item id=12744 type=wheatseed pos=132,15,13 locked=true
+item id=12754 type=wheatseed pos=132,16,13 locked=true
+item id=12755 type=wheatseed pos=132,17,13 locked=true
+item id=12756 type=wheatseed pos=132,18,13 locked=true
+item id=12757 type=wheatseed pos=132,19,13 locked=true
+item id=12762 type=wheatseed pos=133,10,13 locked=true
+item id=12763 type=wheatseed pos=133,11,13 locked=true
+[TownsCLI] OK no matching items type=plantedwheat
+[TownsCLI] OK no matching items type=wheat
+[TownsCLI] OK cell=132,10,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=false orders=false patrol=false entity=wheatseed#12740@132,10,13 item=wheatseed#12740@132,10,13
+[TownsCLI] OK cell=133,10,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=false orders=false patrol=false entity=wheatseed#12762@133,10,13 item=wheatseed#12762@133,10,13
+[TownsCLI] OK order accepted task=create-zone
+[TownsCLI] ERROR order was rejected
+[TownsCLI] ERROR order was rejected
+[TownsCLI] OK stockpile order accepted
+[TownsCLI] OK stockpile order accepted
+[TownsCLI] OK zone id=2 type=zdining points=56 operative=true
+zone id=4 type=zcarpentry points=100 operative=true
+[TownsCLI] OK stockpile id=3 type=rawmaterials points=30 filled=30
+stockpile id=4 type=prepfood points=36 filled=20
+stockpile id=6 type=rawfood points=36 filled=0
+stockpile id=7 type=rawmaterials points=59 filled=59
+stockpile id=8 type=prepfood points=25 filled=4
+stockpile id=9 type=rawmaterials points=91 filled=91
+stockpile id=11 type=rawfood points=8 filled=0
+stockpile id=12 type=prepfood points=7 filled=0
+[TownsCLI] OK date=19/1/1 citizens=7 livings=6765 items=2613 coins=67 view=149,17,13 floors=16 speed=5 paused=false ticks=0
+[TownsCLI] OK stockpile id=3 type=rawmaterials points=30 filled=30
+stockpile id=4 type=prepfood points=36 filled=26
+stockpile id=6 type=rawfood points=36 filled=0
+stockpile id=7 type=rawmaterials points=59 filled=59
+stockpile id=8 type=prepfood points=25 filled=5
+stockpile id=9 type=rawmaterials points=91 filled=91
+stockpile id=11 type=rawfood points=8 filled=0
+stockpile id=12 type=prepfood points=7 filled=0
+[TownsCLI] OK item id=12577 type=apple pos=146,25,13 locked=false
+item id=12598 type=apple pos=159,16,13 locked=false
+item id=12601 type=apple pos=159,15,13 locked=false
+item id=12656 type=apple pos=160,14,13 locked=false
+item id=12714 type=apple pos=159,17,13 locked=false
+item id=12715 type=apple pos=146,27,13 locked=false
+item id=12720 type=apple pos=159,19,13 locked=false
+item id=12727 type=apple pos=160,15,13 locked=false
+item id=12792 type=apple pos=160,18,13 locked=false
+item id=12797 type=apple pos=160,19,13 locked=false
+item id=12805 type=apple pos=161,15,13 locked=false
+item id=12839 type=apple pos=161,16,13 locked=false
+item id=12858 type=apple pos=161,17,13 locked=false
+item id=12863 type=apple pos=161,18,13 locked=false
+item id=12870 type=apple pos=146,28,13 locked=false
+item id=12880 type=apple pos=161,19,13 locked=false
+item id=12915 type=apple pos=162,17,13 locked=false
+item id=12947 type=apple pos=143,28,13 locked=false
+item id=12948 type=apple pos=143,27,13 locked=false
+[TownsCLI] OK item id=12605 type=pear pos=159,18,13 locked=false
+item id=12694 type=pear pos=160,16,13 locked=false
+item id=12789 type=pear pos=159,20,13 locked=false
+item id=12801 type=pear pos=160,20,13 locked=false
+item id=12802 type=pear pos=161,14,13 locked=false
+item id=12911 type=pear pos=161,20,13 locked=false
+item id=12919 type=pear pos=162,19,13 locked=false
+item id=12936 type=pear pos=162,16,13 locked=false
+item id=12953 type=pear pos=159,14,13 locked=false
+item id=12954 type=pear pos=162,18,13 locked=false
+item id=12961 type=pear pos=162,20,13 locked=false
+item id=12965 type=pear pos=163,15,13 locked=false
+[TownsCLI] OK no matching items type=humanremains
+[TownsCLI] OK item id=12814 type=corpse pos=153,24,13 locked=false
+[TownsCLI] OK order accepted task=destroy-entity
+
+[Incubating] Problems report is available at: file:///C:/Users/Adyem/Documents/Game_development/OpenTowns/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.5/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 3m 36s
+2 actionable tasks: 1 executed, 1 up-to-date

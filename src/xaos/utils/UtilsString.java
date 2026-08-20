@@ -115,7 +115,15 @@ public final class UtilsString {
      */
     public static String getDynamicString(String sString) {
         String sAux;
-        int iIndex = sString.indexOf("__MUSIC__"); //$NON-NLS-1$
+        int iIndex = sString.indexOf("__HOSTILE_MOBS__"); //$NON-NLS-1$
+
+        if (iIndex != -1) {
+            String sHostileMobsDisabled = Game.isHostileMobsDisabled() ? Messages.getString("Utils.4") : Messages.getString("Utils.5"); //$NON-NLS-1$ //$NON-NLS-2$
+            sAux = sString.substring(0, iIndex) + sHostileMobsDisabled + sString.substring(iIndex + "__HOSTILE_MOBS__".length()); //$NON-NLS-1$
+            return getDynamicString(sAux);
+        }
+
+        iIndex = sString.indexOf("__MUSIC__"); //$NON-NLS-1$
 
         if (iIndex != -1) {
             // Música ON?

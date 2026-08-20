@@ -68,6 +68,7 @@ public final class CommandPanel {
     public static String COMMAND_MM_SWITCH_PAUSE = "SWITCHPAUSE"; //$NON-NLS-1$
     public static String COMMAND_MM_SWITCH_AUTOSAVE_DAYS = "SWITCHAUTOSAVE"; //$NON-NLS-1$
     public static String COMMAND_MM_SWITCH_SIEGES = "SWITCHSIEGES"; //$NON-NLS-1$
+    public static String COMMAND_MM_SWITCH_HOSTILE_MOBS = "SWITCHHOSTILEMOBS"; //$NON-NLS-1$
     public static String COMMAND_MM_SWITCH_SIEGE_PAUSE = "SWITCHSIEGEPAUSE"; //$NON-NLS-1$
     public static String COMMAND_MM_SWITCH_CARAVAN_PAUSE = "SWITCHCARPAUSE"; //$NON-NLS-1$
     public static String COMMAND_MM_SWITCH_BURY = "SWITCHBURY"; //$NON-NLS-1$
@@ -309,6 +310,10 @@ public final class CommandPanel {
         menuAux.setMaintainOpen(true);
         menuOptionsGame.addItem(menuAux);
         menuAux = new SmartMenu(SmartMenu.TYPE_ITEM, Messages.getString("MainMenuPanel.32"), null, CommandPanel.COMMAND_MM_SWITCH_SIEGES, null, null, null); //$NON-NLS-1$
+        menuAux.setDynamic(true);
+        menuAux.setMaintainOpen(true);
+        menuOptionsGame.addItem(menuAux);
+        menuAux = new SmartMenu(SmartMenu.TYPE_ITEM, Messages.getString("MainMenuPanel.79"), null, CommandPanel.COMMAND_MM_SWITCH_HOSTILE_MOBS, null, null, null); //$NON-NLS-1$
         menuAux.setDynamic(true);
         menuAux.setMaintainOpen(true);
         menuOptionsGame.addItem(menuAux);
@@ -1129,6 +1134,9 @@ public final class CommandPanel {
                 if (Game.getSiegeDifficulty() > Game.SIEGE_DIFFICULTY_INSANE) {
                     Game.setSiegeDifficulty(Game.SIEGE_DIFFICULTY_OFF);
                 }
+                UtilsFiles.saveOptions();
+            } else if (sCommand.equals(COMMAND_MM_SWITCH_HOSTILE_MOBS)) {
+                Game.setHostileMobsDisabled(!Game.isHostileMobsDisabled());
                 UtilsFiles.saveOptions();
             } else if (sCommand.equals(COMMAND_MM_SWITCH_SIEGE_PAUSE)) {
                 Game.setSiegePause(!Game.isSiegePause());

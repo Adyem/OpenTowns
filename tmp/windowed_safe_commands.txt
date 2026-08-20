@@ -1,0 +1,9 @@
+# Inspect the random spawn before committing the village setup.
+status
+order custom-action qchop 30 74 11 150 192 11
+tick 3000
+world
+livings
+setup village
+progress
+status

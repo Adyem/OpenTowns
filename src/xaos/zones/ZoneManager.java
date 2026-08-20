@@ -53,6 +53,14 @@ public class ZoneManager {
         return zoneList.get(sIniHeader);
     }
 
+    public static HashMap<String, ZoneManagerItem> getAllItems() {
+        if (zoneList == null) {
+            loadItems();
+        }
+
+        return zoneList;
+    }
+
     private static void loadXMLZones(String sXMLName, boolean bLoadingMain) {
         try {
             Document doc = UtilsXML.loadXMLFile(sXMLName); //$NON-NLS-1$

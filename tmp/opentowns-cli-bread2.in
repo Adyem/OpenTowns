@@ -1,0 +1,89 @@
+status
+find item corpse
+find item plantedwheat
+find item wheatseed
+zones
+order create-zone zcarpentry 131 21 13 140 30 13
+order create-zone zmasonry 142 22 13 144 24 13
+order create-zone zbakery 142 25 13 144 27 13
+order queue-place qcarpentrybench 135 25 13
+find item carpentrybench
+tasks
+find item carpentrybench
+find item rmwood
+status
+order queue-place qwooddetailer 137 25 13
+find item wooddetailer
+find item carpentrybench
+find item wooddetailer
+find item carpentrybench
+order queue-place qmasonbench 143 23 13
+order queue-place qmill 139 28 13
+order queue-place qbakertable 142 26 13
+order queue-place qbakeroven 143 26 13
+find item masonbench
+find item mill
+find item bakertable
+find item bakeroven
+status
+find item mill
+find item bakertable
+find item bakeroven
+find item flour
+tasks
+zones
+cell 139 28 13
+cell 142 26 13
+cell 143 26 13
+livings
+zones
+tasks
+find item masonbench
+find item wooddetailer
+find item carpentrybench
+order cancel-order 142 26 13
+order queue-place qmill 139 28 13
+order queue-place qbakertable 142 26 13
+order queue-place qbakeroven 143 26 13
+find item mill
+find item bakertable
+find item bakeroven
+status
+order queue-place qmill 139 25 13
+find item mill
+find item rmstone
+status
+status
+stockpiles
+find item apple
+find item pear
+find item wheat
+find item flour
+find item bread
+pause
+save bread-verified
+cell 132 10 13
+find item bread
+speed down
+resume
+status
+find item wheat
+find item flour
+find item bread
+status
+stockpiles
+find item carpentrybench
+find item wooddetailer
+find item masonbench
+find item mill
+find item bakertable
+find item bakeroven
+find item bread
+find item wheat
+find item flour
+find item bread
+tasks
+save bread-verified
+pause
+status
+find item bread

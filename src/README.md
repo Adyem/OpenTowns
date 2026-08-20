@@ -20,6 +20,29 @@ src/
 
 `src/` doubles as the runtime working directory. The game resolves every path (the three .ini files, `data/`, `lib/native`) relative to the current working directory, not the classpath. The Gradle `run` task sets this up.
 
+To use the command shell while the normal windowed game is running, enable
+the live console and type commands in the terminal that launched it:
+
+```powershell
+.\gradlew run -Pcli=true
+```
+
+For a hands-off windowed CLI run, add `-PcliAutoStart=true -PskipLauncher=true`.
+
+Start or load a game in the window first, then type `help`, `status`,
+`stockpiles`, `zones`, `items`, `tasks`, `tick 100`, or any command listed by
+`commands`. Commands are executed on the game thread while rendering
+continues. Do not issue `mine`, `mine-area`, `mine-ladder`, or `dig` commands
+for the current no-deeper-dungeon run.
+
+For a compact first-town plan, type `setup village` (or `village`). It uses
+the starting citizens to choose the ground level and queues a dining room,
+prepared-food storage, a 40-tile apple/pear orchard, a larger wheat field,
+carpentry/masonry/bakery work areas, the workshop chain for flour and bread,
+nearby gathering, and production minimums. `origin` shows the selected anchor
+and `automation` shows the configured minimums. See
+`../docs/basic-village.md` for the full setup and verification commands.
+
 Since the LWJGL 3 port, only `jna.jar`, `platform.jar`, `pngdecoder.jar` and the `steam_api` DLLs in `lib/` are actually used. The LWJGL 2, slick-util and jinput files that come along when copying `lib/` from a Towns install are ignored by the build.
 
 There is a second config layer: the game creates a user folder (`~/.towns` by default; the base directory can be moved with `USER_FOLDER` in towns.ini) and re-reads `towns.ini` from there on top of the local one. Saves, mods, and screenshots also live in the user folder.
@@ -115,6 +138,37 @@ Still vendored in `lib/` (from a Steam Towns install):
 .\gradlew runHeadless -Pseed=42 -Pticks=3000            # deterministic
 .\gradlew runHeadless -Pticks=3000                      # headless, unseeded
 ```
+
+For manual or integration testing, it can also execute commands against the
+live headless world. Commands use the same task-creation seam as the UI:
+
+```powershell
+.\gradlew runHeadless -Pseed=42 -Pcommands="status; origin; tick 1000; hash"
+```
+
+Use `commands` for the complete live command catalog. Inspection commands
+include `status`, `world`, `cell x y z`, `livings [id]`, `items [id]`, `tasks`,
+`buildings`, `stockpiles`, `automation [action-id]`, `progress`, `food-ready`, `origin`,
+`catalog items|terrain|buildings|actions|zones|livings`,
+and `hash`. Simulation commands include `tick [count]`, `step [count]`,
+`pause`, `resume`, `view x y z`, `speed up|down`, `save name`, and `quit`.
+Orders include `mine`, `mine-ladder`, `mine-area`, `dig`, `cancel-order`,
+`build`, and `stockpile`; the generic form
+`order task-name [parameter] [parameter2] [x y z [x2 y2 z2]]` exposes the
+remaining player task types listed by `commands`.
+
+For a coordinate-independent first town, use `setup village` (or `village`).
+It derives the anchor from the randomly generated starting citizens and queues
+the dining, orchard, workshop, bakery, gathering, and production-minimum plan.
+Use `setup village auto [cycles]` to repeat discovery/setup stages, and
+`progress` to see total resources versus prepared/raw-food storage. See
+`docs/basic-village.md` for the staged setup workflow.
+
+`-Pscript=file` reads one command per line, and `-Pinteractive=true` reads
+commands from standard input. In command mode, `tick [count]` controls
+simulation progress; an explicit `-Pticks=N` runs that many additional ticks
+after the commands. `-PpostCommands="status; buildings; hash"` runs a second
+command list after those ticks for unambiguous post-simulation inspection.
 
 Plus optional `-Pmap=normal|desert|jungle|mixed|snow|mountains` and `-PuserFolder=path`. A windowed "New game" is campaign `c1` with the map type as the mission id; `-Pmap` picks the same thing. The user folder defaults to a sandbox under the system temp dir, so test runs never touch `~/.towns`.
 

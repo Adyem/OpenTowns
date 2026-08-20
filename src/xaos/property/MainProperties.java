@@ -36,6 +36,7 @@ public class MainProperties {
     public static Property<Boolean> DISABLED_GODS = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "DISABLED_GODS", BooleanPropertyWrapper.INSTANCE);
     public static Property<Boolean> PAUSE_START = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "PAUSE_START", BooleanPropertyWrapper.INSTANCE);
     public static Property<Integer> SIEGES = new Property<Integer>(PropertyFile.PROPERTY_FILE_MAIN, "SIEGES", IntegerPropertyWrapper.INSTANCE);
+    public static Property<Boolean> DISABLE_HOSTILE_MOBS = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "DISABLE_HOSTILE_MOBS", BooleanPropertyWrapper.INSTANCE);
     public static Property<Boolean> SIEGE_PAUSE = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "SIEGE_PAUSE", BooleanPropertyWrapper.INSTANCE);
     public static Property<Boolean> CARAVAN_PAUSE = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "CARAVAN_PAUSE", BooleanPropertyWrapper.INSTANCE);
     public static Property<Boolean> ALLOW_BURY = new Property<Boolean>(PropertyFile.PROPERTY_FILE_MAIN, "ALLOW_BURY", BooleanPropertyWrapper.INSTANCE);

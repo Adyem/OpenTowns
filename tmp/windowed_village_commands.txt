@@ -1,0 +1,12 @@
+# Use the live windowed CLI and the coordinate-independent village workflow.
+setup village auto 5
+progress
+tick 60000
+setup village
+tick 60000
+setup village
+progress
+buildings
+find item bread
+save basic-village
+quit

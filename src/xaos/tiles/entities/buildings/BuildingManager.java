@@ -50,6 +50,14 @@ public class BuildingManager {
         return itemList.get(sIniHeader);
     }
 
+    public static HashMap<String, BuildingManagerItem> getAllItems() {
+        if (itemList == null) {
+            loadItems();
+        }
+
+        return itemList;
+    }
+
     private static void loadXMLBuildings(String sXMLName, boolean bLoadingMain) {
         try {
             Document doc = UtilsXML.loadXMLFile(sXMLName); //$NON-NLS-1$

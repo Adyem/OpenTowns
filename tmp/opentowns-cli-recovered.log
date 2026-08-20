@@ -1,0 +1,207 @@
+[TownsCLI] OK date=15/1/1 citizens=8 livings=6767 items=2646 coins=67 view=145,13,13 floors=16 speed=3 paused=false ticks=0
+[TownsCLI] OK saved recovered-run.zip
+[TownsCLI] OK date=15/1/1 citizens=8 livings=6768 items=2654 coins=67 view=146,14,13 floors=16 speed=3 paused=false ticks=0
+[TownsCLI] OK zone id=2 type=zdining points=56 operative=true
+[TownsCLI] OK stockpile id=3 type=rawmaterials points=30 filled=30
+stockpile id=4 type=prepfood points=36 filled=0
+stockpile id=6 type=rawfood points=36 filled=9
+stockpile id=7 type=rawmaterials points=59 filled=59
+stockpile id=8 type=prepfood points=29 filled=1
+stockpile id=9 type=rawmaterials points=91 filled=91
+[TownsCLI] OK no buildings
+[TownsCLI] OK item id=9381 type=wheat pos=153,12,13 locked=false
+item id=9476 type=wheat pos=153,13,13 locked=false
+item id=9803 type=wheat pos=153,8,13 locked=false
+item id=9877 type=wheat pos=153,9,13 locked=false
+item id=9885 type=wheat pos=153,10,13 locked=false
+item id=10015 type=wheat pos=153,11,13 locked=false
+item id=10888 type=wheat pos=154,8,13 locked=false
+item id=10894 type=wheat pos=154,9,13 locked=false
+item id=10895 type=wheat pos=154,10,13 locked=false
+[TownsCLI] OK no matching items type=flour
+[TownsCLI] OK no matching items type=bread
+[TownsCLI] OK item id=1935 type=wildwheat pos=65,169,6 locked=false
+item id=1936 type=wildwheat pos=163,0,11 locked=false
+item id=1937 type=wildwheat pos=75,22,11 locked=false
+item id=1938 type=wildwheat pos=30,98,11 locked=false
+item id=1939 type=wildwheat pos=141,79,10 locked=false
+item id=1940 type=wildwheat pos=78,150,8 locked=false
+item id=1942 type=wildwheat pos=31,81,12 locked=false
+item id=1944 type=wildwheat pos=91,50,11 locked=false
+item id=1945 type=wildwheat pos=146,56,11 locked=false
+item id=1947 type=wildwheat pos=123,51,11 locked=false
+item id=1948 type=wildwheat pos=181,195,12 locked=false
+item id=1949 type=wildwheat pos=36,47,12 locked=false
+item id=1950 type=wildwheat pos=153,71,13 locked=false
+item id=1951 type=wildwheat pos=185,196,13 locked=false
+item id=1953 type=wildwheat pos=113,186,7 locked=false
+item id=1954 type=wildwheat pos=162,65,13 locked=false
+item id=1955 type=wildwheat pos=196,78,13 locked=false
+item id=1956 type=wildwheat pos=85,41,11 locked=false
+item id=1957 type=wildwheat pos=37,69,11 locked=false
+item id=1959 type=wildwheat pos=194,189,13 locked=false
+item id=1960 type=wildwheat pos=185,8,10 locked=false
+item id=1961 type=wildwheat pos=157,6,10 locked=false
+item id=1962 type=wildwheat pos=51,160,13 locked=false
+item id=1963 type=wildwheat pos=103,108,11 locked=false
+item id=1964 type=wildwheat pos=82,188,11 locked=false
+item id=1965 type=wildwheat pos=21,86,13 locked=false
+item id=1966 type=wildwheat pos=147,175,7 locked=false
+item id=1967 type=wildwheat pos=123,35,11 locked=false
+item id=1968 type=wildwheat pos=53,25,9 locked=false
+item id=1970 type=wildwheat pos=98,130,13 locked=false
+item id=1971 type=wildwheat pos=107,13,8 locked=false
+item id=1972 type=wildwheat pos=59,130,6 locked=false
+item id=1973 type=wildwheat pos=117,96,12 locked=false
+item id=1975 type=wildwheat pos=146,126,11 locked=false
+item id=1976 type=wildwheat pos=195,32,13 locked=false
+item id=1977 type=wildwheat pos=98,121,13 locked=false
+item id=1979 type=wildwheat pos=118,38,12 locked=false
+item id=1980 type=wildwheat pos=32,84,13 locked=false
+item id=1981 type=wildwheat pos=105,13,10 locked=false
+item id=1982 type=wildwheat pos=71,72,7 locked=false
+item id=1983 type=wildwheat pos=152,73,13 locked=false
+item id=1984 type=wildwheat pos=145,193,13 locked=false
+item id=1985 type=wildwheat pos=3,117,11 locked=false
+item id=1986 type=wildwheat pos=159,174,9 locked=false
+item id=1987 type=wildwheat pos=121,131,13 locked=false
+item id=1988 type=wildwheat pos=55,146,13 locked=false
+[TownsCLI] OK no matching items type=wheatseed
+[TownsCLI] OK item id=9203 type=rmwood pos=155,3,13 locked=false
+item id=9204 type=rmwood pos=155,2,13 locked=false
+item id=9205 type=rmwood pos=155,26,13 locked=false
+item id=9206 type=rmwood pos=155,27,13 locked=false
+item id=9207 type=rmwood pos=156,26,13 locked=false
+item id=9208 type=rmwood pos=157,24,13 locked=false
+item id=9209 type=rmwood pos=157,25,13 locked=false
+item id=9210 type=rmwood pos=160,3,13 locked=false
+item id=9211 type=rmwood pos=153,6,13 locked=false
+item id=9212 type=rmwood pos=154,2,13 locked=false
+item id=9213 type=rmwood pos=160,4,13 locked=false
+item id=9214 type=rmwood pos=160,5,13 locked=false
+item id=9215 type=rmwood pos=153,5,13 locked=false
+item id=9216 type=rmwood pos=153,22,13 locked=false
+item id=9217 type=rmwood pos=157,26,13 locked=false
+item id=9218 type=rmwood pos=154,4,13 locked=false
+item id=9219 type=rmwood pos=158,27,13 locked=false
+item id=9220 type=rmwood pos=158,23,13 locked=false
+item id=9221 type=rmwood pos=161,1,13 locked=false
+item id=9222 type=rmwood pos=153,26,13 locked=false
+item id=9223 type=rmwood pos=154,3,13 locked=false
+item id=9224 type=rmwood pos=160,6,13 locked=false
+item id=9225 type=rmwood pos=162,4,13 locked=false
+item id=9226 type=rmwood pos=153,4,13 locked=false
+item id=9227 type=rmwood pos=162,5,13 locked=false
+item id=9229 type=rmwood pos=153,23,13 locked=false
+item id=9230 type=rmwood pos=155,22,13 locked=false
+item id=9231 type=rmwood pos=154,23,13 locked=false
+item id=9233 type=rmwood pos=154,5,13 locked=false
+item id=9234 type=rmwood pos=153,25,13 locked=false
+item id=9235 type=rmwood pos=153,27,13 locked=false
+item id=9236 type=rmwood pos=155,23,13 locked=false
+item id=9237 type=rmwood pos=157,22,13 locked=false
+item id=9238 type=rmwood pos=154,26,13 locked=false
+item id=9240 type=rmwood pos=154,25,13 locked=false
+item id=9241 type=rmwood pos=154,24,13 locked=false
+item id=9243 type=rmwood pos=158,22,13 locked=false
+item id=9244 type=rmwood pos=156,23,13 locked=false
+item id=9245 type=rmwood pos=154,27,13 locked=false
+item id=9246 type=rmwood pos=154,6,13 locked=false
+item id=9247 type=rmwood pos=163,1,13 locked=false
+item id=9248 type=rmwood pos=157,23,13 locked=false
+item id=9249 type=rmwood pos=155,1,13 locked=false
+item id=9250 type=rmwood pos=155,24,13 locked=false
+item id=9251 type=rmwood pos=155,25,13 locked=false
+item id=9252 type=rmwood pos=157,27,13 locked=false
+item id=9253 type=rmwood pos=158,24,13 locked=false
+item id=9254 type=rmwood pos=164,5,13 locked=false
+item id=9255 type=rmwood pos=158,26,13 locked=false
+item id=9256 type=rmwood pos=158,25,13 locked=false
+[TownsCLI] OK item id=9560 type=rmstone pos=140,10,13 locked=false
+item id=9562 type=rmstone pos=140,11,13 locked=false
+item id=9563 type=rmstone pos=141,12,13 locked=false
+item id=9568 type=rmstone pos=145,13,13 locked=false
+item id=9574 type=rmstone pos=158,4,13 locked=false
+item id=9584 type=rmstone pos=149,13,13 locked=false
+item id=9585 type=rmstone pos=153,7,13 locked=false
+item id=9589 type=rmstone pos=155,7,13 locked=false
+item id=9593 type=rmstone pos=153,1,13 locked=false
+item id=9594 type=rmstone pos=157,7,13 locked=false
+item id=9603 type=rmstone pos=157,6,13 locked=false
+item id=9624 type=rmstone pos=158,2,13 locked=false
+item id=9625 type=rmstone pos=147,8,13 locked=false
+item id=9628 type=rmstone pos=161,12,13 locked=false
+item id=9629 type=rmstone pos=159,3,13 locked=false
+item id=9643 type=rmstone pos=147,13,13 locked=false
+item id=9644 type=rmstone pos=148,8,13 locked=false
+item id=9653 type=rmstone pos=148,11,13 locked=false
+[TownsCLI] OK cell=132,10,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=141,19,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=132,20,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=141,29,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=false orders=false patrol=false entity=plantedharvestedappletree#11370@141,29,13 item=plantedharvestedappletree#11370@141,29,13
+[TownsCLI] OK cell=130,20,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=139,29,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK order accepted task=custom-action
+[TownsCLI] OK no tasks
+[TownsCLI] OK cell=132,10,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=false patrol=false
+[TownsCLI] OK cell=141,19,13 terrain=0 fluidType=0 fluidCount=0 mined=true discovered=true empty=true orders=true patrol=false
+[TownsCLI] OK order accepted task=custom-action
+[TownsCLI] OK item id=9381 type=wheat pos=153,12,13 locked=false
+item id=9476 type=wheat pos=153,13,13 locked=false
+item id=9803 type=wheat pos=153,8,13 locked=false
+item id=9877 type=wheat pos=153,9,13 locked=false
+item id=9885 type=wheat pos=153,10,13 locked=false
+item id=10015 type=wheat pos=153,11,13 locked=false
+item id=10888 type=wheat pos=154,8,13 locked=false
+item id=10894 type=wheat pos=154,9,13 locked=false
+item id=10895 type=wheat pos=154,10,13 locked=false
+item id=12240 type=wheat pos=152,73,13 locked=false
+item id=12244 type=wheat pos=153,71,13 locked=false
+item id=12249 type=wheat pos=162,65,13 locked=false
+[TownsCLI] OK item id=1935 type=wildwheat pos=65,169,6 locked=false
+item id=1936 type=wildwheat pos=163,0,11 locked=false
+item id=1937 type=wildwheat pos=75,22,11 locked=false
+item id=1938 type=wildwheat pos=30,98,11 locked=false
+item id=1939 type=wildwheat pos=141,79,10 locked=false
+item id=1940 type=wildwheat pos=78,150,8 locked=false
+item id=1942 type=wildwheat pos=31,81,12 locked=false
+item id=1944 type=wildwheat pos=91,50,11 locked=false
+item id=1945 type=wildwheat pos=146,56,11 locked=false
+item id=1947 type=wildwheat pos=123,51,11 locked=false
+item id=1948 type=wildwheat pos=181,195,12 locked=false
+item id=1949 type=wildwheat pos=36,47,12 locked=false
+item id=1951 type=wildwheat pos=185,196,13 locked=false
+item id=1953 type=wildwheat pos=113,186,7 locked=false
+item id=1955 type=wildwheat pos=196,78,13 locked=false
+item id=1956 type=wildwheat pos=85,41,11 locked=false
+item id=1957 type=wildwheat pos=37,69,11 locked=false
+item id=1959 type=wildwheat pos=194,189,13 locked=false
+item id=1960 type=wildwheat pos=185,8,10 locked=false
+item id=1961 type=wildwheat pos=157,6,10 locked=false
+item id=1962 type=wildwheat pos=51,160,13 locked=false
+item id=1963 type=wildwheat pos=103,108,11 locked=false
+item id=1964 type=wildwheat pos=82,188,11 locked=false
+item id=1965 type=wildwheat pos=21,86,13 locked=false
+item id=1966 type=wildwheat pos=147,175,7 locked=false
+item id=1967 type=wildwheat pos=123,35,11 locked=false
+item id=1968 type=wildwheat pos=53,25,9 locked=false
+item id=1970 type=wildwheat pos=98,130,13 locked=false
+item id=1971 type=wildwheat pos=107,13,8 locked=false
+item id=1972 type=wildwheat pos=59,130,6 locked=false
+item id=1973 type=wildwheat pos=117,96,12 locked=false
+item id=1975 type=wildwheat pos=146,126,11 locked=false
+item id=1976 type=wildwheat pos=195,32,13 locked=false
+item id=1977 type=wildwheat pos=98,121,13 locked=false
+item id=1979 type=wildwheat pos=118,38,12 locked=false
+item id=1980 type=wildwheat pos=32,84,13 locked=false
+item id=1981 type=wildwheat pos=105,13,10 locked=false
+item id=1982 type=wildwheat pos=71,72,7 locked=false
+item id=1984 type=wildwheat pos=145,193,13 locked=false
+item id=1985 type=wildwheat pos=3,117,11 locked=false
+item id=1986 type=wildwheat pos=159,174,9 locked=false
+item id=1987 type=wildwheat pos=121,131,13 locked=false
+item id=1988 type=wildwheat pos=55,146,13 locked=false
+[TownsCLI] OK no tasks
+[TownsCLI] OK date=16/1/1 citizens=8 livings=6767 items=2681 coins=67 view=146,14,13 floors=16 speed=5 paused=false ticks=0
+[TownsCLI] OK saved bread-prep.zip
+[TownsCLI] OK exiting

@@ -501,6 +501,10 @@ public final class MainMenuPanel implements Runnable {
         menuAux.setDynamic(true);
         menuAux.setBorderColor(borderColor);
         menuOptionsGame.addItem(menuAux);
+        menuAux = new SmartMenu(SmartMenu.TYPE_ITEM, Messages.getString("MainMenuPanel.79"), null, CommandPanel.COMMAND_MM_SWITCH_HOSTILE_MOBS, null, null, null, textColor); //$NON-NLS-1$
+        menuAux.setDynamic(true);
+        menuAux.setBorderColor(borderColor);
+        menuOptionsGame.addItem(menuAux);
         menuAux = new SmartMenu(SmartMenu.TYPE_ITEM, Messages.getString("MainMenuPanel.36"), null, CommandPanel.COMMAND_MM_SWITCH_SIEGE_PAUSE, null, null, null, textColor); //$NON-NLS-1$
         menuAux.setDynamic(true);
         menuAux.setBorderColor(borderColor);

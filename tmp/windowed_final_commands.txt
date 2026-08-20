@@ -1,0 +1,7 @@
+# Inspect the spawn before starting the safer two-pass village workflow.
+status
+livings
+setup village
+tick 3000
+progress
+setup village

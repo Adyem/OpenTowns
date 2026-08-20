@@ -3,6 +3,11 @@ package xaos.main;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -24,6 +29,8 @@ import xaos.Towns;
 import xaos.TownsProperties;
 import xaos.actions.ActionManager;
 import xaos.actions.ActionPriorityManager;
+import xaos.cli.GameCommandShell;
+import xaos.cli.GameConsole;
 import xaos.campaign.CampaignManager;
 import xaos.campaign.MissionData;
 import xaos.campaign.TutorialFlow;
@@ -171,6 +178,7 @@ public final class Game {
 	private static boolean pauseStartON;
 	private static int autosaveDays = 0;
 	private static int siegeDifficulty;
+	private static boolean hostileMobsDisabled;
 	private static boolean siegePause;
 	private static boolean caravanPause;
 	private static boolean allowBury;
@@ -185,6 +193,10 @@ public final class Game {
 	private static String savegameName;
 
 	private static boolean headless;
+
+	private GameConsole cliConsole;
+	private GameCommandShell cliShell;
+	private World cliShellWorld;
 
 	private boolean displayFullscreen = false;
 
@@ -299,6 +311,7 @@ public final class Game {
 		pauseStartON = Boolean.parseBoolean (Towns.getPropertiesString ("PAUSE_START")); //$NON-NLS-1$
 		setAutosaveDays (Towns.getPropertiesInt ("AUTOSAVE_DAYS", 0)); //$NON-NLS-1$
 		setSiegeDifficulty (Towns.getPropertiesInt ("SIEGES", SIEGE_DIFFICULTY_NORMAL)); //$NON-NLS-1$
+		hostileMobsDisabled = Boolean.parseBoolean (Towns.getPropertiesString ("DISABLE_HOSTILE_MOBS")); //$NON-NLS-1$
 		siegePause = Boolean.parseBoolean (Towns.getPropertiesString ("SIEGE_PAUSE")); //$NON-NLS-1$
 		caravanPause = Boolean.parseBoolean (Towns.getPropertiesString ("CARAVAN_PAUSE")); //$NON-NLS-1$
 		allowBury = Boolean.parseBoolean (Towns.getPropertiesString ("ALLOW_BURY")); //$NON-NLS-1$
@@ -1386,11 +1399,27 @@ public final class Game {
 
 		// Hacemos sonar la música del main menú
 		UtilsAL.play (UtilsAL.SOURCE_MUSIC_MAINMENU);
+		if (Boolean.getBoolean ("towns.cli")) { //$NON-NLS-1$
+			cliConsole = new GameConsole ();
+			System.out.println ("[TownsCLI] windowed console enabled; start or load a game, then type 'help'."); //$NON-NLS-1$
+			if (Boolean.getBoolean ("towns.cli.autostart")) { //$NON-NLS-1$
+				String cliLoad = System.getProperty ("towns.cli.load", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				if (cliLoad != null && !cliLoad.trim ().isEmpty ()) {
+					continueGame (cliLoad.trim (), null);
+				} else {
+					String cliMap = System.getProperty ("towns.cli.map", "normal"); //$NON-NLS-1$ //$NON-NLS-2$
+					startGame ("c1", cliMap); //$NON-NLS-1$
+				}
+			}
+		}
 //		int checkTrigger = (4 * FPS_INGAME); // Para que lo mire nada más empezar, en el primer ciclo
 //		boolean bVictory = false;
 
 //		int iMissionCompletedWidth = (UtilFont.getWidth (Messages.getString ("Game.2"))) / 2; //$NON-NLS-1$
 		while (!Display.isCloseRequested ()) {
+			if (processCliCommands ()) {
+				break;
+			}
 			handleResize ();
 
 			// Tratamos los eventos del mouse
@@ -1506,6 +1535,61 @@ public final class Game {
 
 		// Exit
 		Game.exit ();
+	}
+
+
+	/**
+	 * Executes queued windowed-console commands on the game/render thread.
+	 * Commands typed while the main menu is open remain queued until a world is
+	 * started or loaded.
+	 */
+	private boolean processCliCommands () {
+		if (cliConsole == null) {
+			return false;
+		}
+
+		if (getWorld () != null && cliShellWorld != getWorld ()) {
+			cliShellWorld = getWorld ();
+			cliShell = new GameCommandShell (cliShellWorld);
+			System.out.println ("[TownsCLI] game ready; type 'help' for commands."); //$NON-NLS-1$
+		}
+
+		if (cliShell == null) {
+			return false;
+		}
+
+		String line;
+		while ((line = cliConsole.poll ()) != null) {
+			GameCommandShell.CommandResult result = cliShell.execute (line);
+			if (!result.getMessage ().isEmpty ()) {
+				String output = "[TownsCLI] " + (result.isSuccessful () ? "OK " : "ERROR ") + result.getMessage (); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				System.out.println (output);
+				writeCliLog (output);
+			}
+			if (cliShell.isExitRequested ()) {
+				cliConsole.close ();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static void writeCliLog (String output) {
+		String configuredLog = System.getProperty ("towns.cli.log");
+		if (configuredLog == null || configuredLog.trim ().isEmpty ()) {
+			return;
+		}
+		try {
+			Path log = Paths.get (configuredLog).toAbsolutePath ();
+			Path parent = log.getParent ();
+			if (parent != null) {
+				Files.createDirectories (parent);
+			}
+			Files.write (log, (output + System.lineSeparator ()).getBytes (StandardCharsets.UTF_8),
+					StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+		} catch (Exception e) {
+			System.err.println ("[TownsCLI] log output stopped: " + e.getMessage ());
+		}
 	}
 
 
@@ -2001,6 +2085,17 @@ public final class Game {
 
 	public static int getSiegeDifficulty () {
 		return siegeDifficulty;
+	}
+
+	public static void setHostileMobsDisabled (boolean disabled) {
+		Game.hostileMobsDisabled = disabled;
+		if (disabled && world != null) {
+			world.removeHostileMobs ();
+		}
+	}
+
+	public static boolean isHostileMobsDisabled () {
+		return hostileMobsDisabled;
 	}
 
 

@@ -1,0 +1,5 @@
+# Phase 1: queue the coordinate-independent starter village.
+setup village auto 5
+progress
+setup village
+tick 30000

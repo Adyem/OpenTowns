@@ -1,0 +1,30 @@
+status
+save recovered-run
+status
+zones
+stockpiles
+buildings
+find item wheat
+find item flour
+find item bread
+find item wildwheat
+find item wheatseed
+find item rmwood
+find item rmstone
+cell 132 10 13
+cell 141 19 13
+cell 132 20 13
+cell 141 29 13
+cell 130 20 13
+cell 139 29 13
+order custom-action qtill 132 10 13 141 19 13
+tasks
+cell 132 10 13
+cell 141 19 13
+order custom-action qharvestwildwheat 150 60 13 165 80 13
+find item wheat
+find item wildwheat
+tasks
+status
+save bread-prep
+quit

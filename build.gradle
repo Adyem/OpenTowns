@@ -31,6 +31,10 @@ sourceSets {
         resources {
             srcDirs = []
         }
+        // The test sources live outside the conventional src/test tree;
+        // retain the normal dependency on the compiled main source set.
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
 }
 
@@ -133,8 +137,32 @@ tasks.register('runHeadless', JavaExec) {
     if (project.hasProperty('map')) {
         args "--map=${project.property('map')}"
     }
+    if (project.hasProperty('load')) {
+        args "--load=${project.property('load')}"
+    }
     if (project.hasProperty('userFolder')) {
         args "--user-folder=${project.property('userFolder')}"
+    }
+    if (project.hasProperty('commands')) {
+        args "--commands=${project.property('commands')}"
+    }
+    if (project.hasProperty('postCommands')) {
+        args "--post-commands=${project.property('postCommands')}"
+    }
+    if (project.hasProperty('command')) {
+        args "--command=${project.property('command')}"
+    }
+    def commandScript = project.findProperty('script')
+    if (commandScript != null && commandScript.toString() != 'false') {
+        args "--script=${commandScript}"
+    }
+    def cliInteractive = project.findProperty('interactive')
+    if (cliInteractive != null && cliInteractive.toString().toBoolean()) {
+        args '--interactive'
+    }
+    if (project.findProperty('protocol')?.toString()?.equalsIgnoreCase('json')) {
+        args '--protocol=json'
+        standardInput = System.in
     }
 }
 
@@ -156,6 +184,7 @@ test {
     }
 }
 
+
 tasks.named('run') {
     // The game resolves towns.ini, graphics.ini, audio.ini and data/
     // relative to the working directory. lib/native is only needed for
@@ -169,6 +198,28 @@ tasks.named('run') {
     // access, deprecated for removal (JEP 498). Opt in explicitly until
     // LWJGL moves to the FFM API.
     jvmArgs '--sun-misc-unsafe-memory-access=allow'
+    if (project.findProperty('cli')?.toString()?.toBoolean()) {
+        jvmArgs '-Dtowns.cli=true'
+        standardInput = System.in
+    }
+    if (project.findProperty('cliAutoStart')?.toString()?.toBoolean()) {
+        jvmArgs '-Dtowns.cli.autostart=true'
+    }
+    if (project.hasProperty('cliMap')) {
+        jvmArgs "-Dtowns.cli.map=${project.property('cliMap')}"
+    }
+    if (project.hasProperty('cliLoad')) {
+        jvmArgs "-Dtowns.cli.load=${project.property('cliLoad')}"
+    }
+    if (project.hasProperty('cliFile')) {
+        jvmArgs "-Dtowns.cli.file=${project.property('cliFile')}"
+    }
+    if (project.hasProperty('cliLog')) {
+        jvmArgs "-Dtowns.cli.log=${project.property('cliLog')}"
+    }
+    if (project.findProperty('skipLauncher')?.toString()?.toBoolean()) {
+        jvmArgs '-Dtowns.skipLauncher=true'
+    }
     // macOS: GLFW (and any AppKit windowing) must run on the process's
     // first thread, so the JVM has to be told to keep the main thread free
     // for it. Without this the windowed game (xaos.Towns) never opens a

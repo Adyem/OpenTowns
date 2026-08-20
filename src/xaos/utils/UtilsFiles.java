@@ -194,6 +194,7 @@ public final class UtilsFiles {
             pw.setProperty(MainProperties.PAUSE_START, Game.isPauseStartON());
             pw.setProperty(MainProperties.AUTOSAVE_DAYS, Game.getAutosaveDays());
             pw.setProperty(MainProperties.SIEGES, Game.getSiegeDifficulty());
+            pw.setProperty(MainProperties.DISABLE_HOSTILE_MOBS, Game.isHostileMobsDisabled());
             pw.setProperty(MainProperties.SIEGE_PAUSE, Game.isSiegePause());
             pw.setProperty(MainProperties.CARAVAN_PAUSE, Game.isCaravanPause());
             pw.setProperty(MainProperties.ALLOW_BURY, Game.isAllowBury());

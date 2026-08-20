@@ -1,0 +1,5 @@
+# Start with the coordinate-independent village setup; later batches are appended live.
+setup village
+progress
+buildings
+tick 5000

@@ -1,0 +1,5 @@
+# Start the coordinate-independent setup in the wood-rich jungle map.
+setup village
+progress
+buildings
+tick 5000

@@ -1,7 +1,17 @@
 package xaos;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
+import xaos.cli.GameCommandShell;
+import xaos.cli.GameCommandProtocol;
 import xaos.main.Game;
 import xaos.main.World;
 import xaos.tiles.Cell;
@@ -27,7 +37,8 @@ import xaos.utils.UtilsSavegame;
  *
  * Usage:
  *   xaos.TownsHeadless [--seed=N] [--ticks=N] [--map=normal|desert|jungle|mixed|snow|mountains] [--user-folder=path]
- *                      [--save=name] [--load=name]
+ *                      [--save=name] [--load=name] [--commands="setup village; tick 100"]
+ *                      [--script=file] [--interactive] [--protocol=json] [--post-commands="status; buildings"]
  *
  * --save=name writes a savegame (user-folder/save/name.zip) after the tick
  * loop, right before the summary. --load=name skips worldgen and loads that
@@ -49,10 +60,16 @@ public final class TownsHeadless {
     public static void main(String[] args) {
         Long seed = null;
         long ticks = 3000;
+        boolean ticksSpecified = false;
         String map = "normal";
         String userFolderBase = System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "opentowns-headless";
         String saveName = null;
         String loadName = null;
+        List<String> commands = new ArrayList<String>();
+        List<String> postCommands = new ArrayList<String>();
+        String scriptName = null;
+        boolean interactive = false;
+        boolean jsonProtocol = false;
 
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
@@ -60,6 +77,10 @@ public final class TownsHeadless {
                 seed = Long.valueOf(arg.substring("--seed=".length()));
             } else if (arg.startsWith("--ticks=")) {
                 ticks = Long.parseLong(arg.substring("--ticks=".length()));
+                if (ticks < 0) {
+                    throw new IllegalArgumentException("--ticks must not be negative");
+                }
+                ticksSpecified = true;
             } else if (arg.startsWith("--map=")) {
                 map = arg.substring("--map=".length());
             } else if (arg.startsWith("--user-folder=")) {
@@ -68,11 +89,31 @@ public final class TownsHeadless {
                 saveName = arg.substring("--save=".length());
             } else if (arg.startsWith("--load=")) {
                 loadName = arg.substring("--load=".length());
+            } else if (arg.startsWith("--command=")) {
+                commands.add(arg.substring("--command=".length()));
+            } else if (arg.startsWith("--commands=")) {
+                addCommands(commands, arg.substring("--commands=".length()));
+            } else if (arg.startsWith("--post-commands=")) {
+                addCommands(postCommands, arg.substring("--post-commands=".length()));
+            } else if (arg.startsWith("--script=")) {
+                scriptName = arg.substring("--script=".length());
+            } else if (arg.equals("--interactive")) {
+                interactive = true;
+            } else if (arg.equals("--protocol=json")) {
+                jsonProtocol = true;
+                interactive = true;
             } else {
                 System.err.println("Unknown argument: " + arg);
-                System.err.println("Usage: xaos.TownsHeadless [--seed=N] [--ticks=N] [--map=type] [--user-folder=path] [--save=name] [--load=name]");
+                System.err.println("Usage: xaos.TownsHeadless [--seed=N] [--ticks=N] [--map=type] [--user-folder=path] [--save=name] [--load=name] [--commands=...|--script=file|--interactive] [--protocol=json] [--post-commands=...]");
                 System.exit(1);
             }
+        }
+
+        // Keep stdout parseable in machine mode. Startup and final summaries
+        // continue to be useful diagnostics, but belong on stderr.
+        PrintStream protocolOutput = System.out;
+        if (jsonProtocol) {
+            System.setOut(System.err);
         }
 
         File fBase = new File(userFolderBase);
@@ -90,7 +131,9 @@ public final class TownsHeadless {
             Utils.setRandomSeed(seed.longValue());
         }
 
-        System.out.println("[TownsHeadless] seed=" + (seed != null ? seed.toString() : "none") + " ticks=" + ticks + " map=" + map);
+        boolean commandMode = !commands.isEmpty() || scriptName != null || interactive || !postCommands.isEmpty();
+        String tickDescription = commandMode && !ticksSpecified ? "command" : Long.toString(ticks);
+        System.out.println("[TownsHeadless] seed=" + (seed != null ? seed.toString() : "none") + " ticks=" + tickDescription + " map=" + map);
 
         long lTime = System.currentTimeMillis();
         if (loadName != null) {
@@ -111,14 +154,56 @@ public final class TownsHeadless {
 
         World world = Game.getWorld();
 
-        lTime = System.currentTimeMillis();
-        for (long i = 0; i < ticks; i++) {
-            world.nextTurn();
-            if (AStarQueue.isSynchronousMode()) {
-                AStarQueue.drainSynchronously();
+        if (commandMode) {
+            GameCommandShell shell = new GameCommandShell(world);
+            if (scriptName != null && !runScript(shell, Path.of(scriptName))) {
+                Game.exit();
+                System.exit(1);
             }
+            for (String command : commands) {
+                if (!runCommand(shell, command)) {
+                    Game.exit();
+                    System.exit(1);
+                }
+                if (shell.isExitRequested()) {
+                    break;
+                }
+            }
+            if (interactive && !shell.isExitRequested()) {
+                if (jsonProtocol) {
+                    runJsonInteractive(shell, protocolOutput);
+                } else {
+                    runInteractive(shell);
+                }
+            }
+            if (ticksSpecified && !shell.isExitRequested()) {
+                if (!runCommand(shell, "tick " + ticks)) {
+                    Game.exit();
+                    System.exit(1);
+                }
+            }
+            if (!shell.isExitRequested()) {
+                for (String command : postCommands) {
+                    if (!runCommand(shell, command)) {
+                        Game.exit();
+                        System.exit(1);
+                    }
+                    if (shell.isExitRequested()) {
+                        break;
+                    }
+                }
+            }
+            System.out.println("[TownsHeadless] command mode complete (" + shell.getTicksAdvanced() + " ticks advanced)");
+        } else {
+            lTime = System.currentTimeMillis();
+            for (long i = 0; i < ticks; i++) {
+                world.nextTurn();
+                if (AStarQueue.isSynchronousMode()) {
+                    AStarQueue.drainSynchronously();
+                }
+            }
+            System.out.println("[TownsHeadless] " + ticks + " ticks done (" + (System.currentTimeMillis() - lTime) + "ms)");
         }
-        System.out.println("[TownsHeadless] " + ticks + " ticks done (" + (System.currentTimeMillis() - lTime) + "ms)");
 
         if (saveName != null) {
             try {
@@ -137,6 +222,68 @@ public final class TownsHeadless {
         // The A* worker (unseeded mode) is a non-daemon thread; exit cleanly.
         // UtilsGL/UtilsAL destroy are no-ops headless (never initialized).
         Game.exit();
+    }
+
+    private static boolean runCommand(GameCommandShell shell, String command) {
+        GameCommandShell.CommandResult result = shell.execute(command);
+        if (!result.getMessage().isEmpty()) {
+            System.out.println("[TownsHeadless] " + result.getMessage());
+        }
+        if (!result.isSuccessful()) {
+            System.err.println("[TownsHeadless] command error: " + command);
+        }
+        return result.isSuccessful();
+    }
+
+    private static boolean runScript(GameCommandShell shell, Path script) {
+        try {
+            for (String line : Files.readAllLines(script)) {
+                if (!runCommand(shell, line)) {
+                    return false;
+                }
+                if (shell.isExitRequested()) {
+                    return true;
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            System.err.println("[TownsHeadless] could not read command script " + script + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    private static void runInteractive(GameCommandShell shell) {
+        System.out.println("[TownsHeadless] interactive mode; type 'help' or 'quit'");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String line;
+            while (!shell.isExitRequested() && (line = reader.readLine()) != null) {
+                runCommand(shell, line);
+            }
+        } catch (IOException e) {
+            System.err.println("[TownsHeadless] interactive input failed: " + e.getMessage());
+        }
+    }
+
+    private static void runJsonInteractive(GameCommandShell shell, PrintStream output) {
+        GameCommandProtocol protocol = new GameCommandProtocol(shell);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+            String line;
+            while (!shell.isExitRequested() && (line = reader.readLine()) != null) {
+                output.println(protocol.execute(line));
+                output.flush();
+            }
+        } catch (IOException e) {
+            // stdout must remain valid NDJSON; diagnostics are on stderr.
+            System.err.println("[TownsHeadless] JSON input failed: " + e.getMessage());
+        }
+    }
+
+    private static void addCommands(List<String> commands, String value) {
+        for (String command : value.split(";")) {
+            if (!command.trim().isEmpty()) {
+                commands.add(command.trim());
+            }
+        }
     }
 
     /**

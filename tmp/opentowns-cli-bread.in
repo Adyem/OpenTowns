@@ -1,0 +1,44 @@
+status
+automate qharvestwheat 10
+automate qflour 10
+automate qbread 10
+status
+cell 122 10 13
+cell 131 19 13
+cell 122 21 13
+cell 131 30 13
+cell 132 21 13
+cell 140 30 13
+cell 131 21 13
+cell 140 30 13
+cell 142 22 13
+cell 144 28 13
+cell 128 21 13
+cell 129 25 13
+cell 145 22 13
+cell 146 26 13
+order custom-action qwheatseed 153 8 13 154 13 13
+order custom-action qwheatseed 152 73 13
+order queue-place-area qwheatseed 132 10 13 141 19 13
+tasks
+find item wheatseed
+find item plantedwheat
+find item wheat
+cell 132 10 13
+cell 133 10 13
+order create-zone zcarpentry 131 21 13 140 30 13
+order create-zone zmasonry 142 22 13 143 24 13
+order create-zone zbakery 142 26 13 143 27 13
+stockpile rawfood 147 22 13 148 26 13
+stockpile prepfood 149 22 13 150 26 13
+zones
+stockpiles
+status
+stockpiles
+find item apple
+find item pear
+find item humanremains
+find item corpse
+order destroy-entity 153 24 13
+find item corpse
+find item humanremains

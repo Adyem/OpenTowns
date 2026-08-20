@@ -1,0 +1,12 @@
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE
+Picked up JAVA_TOOL_OPTIONS: -Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE
+[Aug 11, 2026, 12:09:02?PM][Towns] Error Code [985]
+[Aug 11, 2026, 12:09:02?PM][Towns] java.lang.NullPointerException: Cannot read field "x" because "p3d" is null
+	at xaos.main.World.getCell(World.java:501)
+	at xaos.tasks.TaskManager.executeDirectTasks(TaskManager.java:919)
+	at xaos.tasks.TaskManager.executeAll(TaskManager.java:720)
+	at xaos.main.World.nextTurn(World.java:1798)
+	at xaos.main.Game.run(Game.java:1430)
+	at xaos.main.Game.<init>(Game.java:289)
+	at xaos.Towns.main(Towns.java:111)
+

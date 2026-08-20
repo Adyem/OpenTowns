@@ -1,0 +1,4 @@
+[TownsCLI] OK village auto stages complete; advanced=210000 ticks; run 'progress' and continue with 'setup village' after resources arrive
+[TownsCLI] OK origin=180 43 11 items=apple:1,pear:8,wheat:0,flour:0,bread:0,rmstone:0,rmwood:0,carpentrybench:0,wooddetailer:0,masonbench:0,mill:0,bakertable:0,bakeroven:0 storage=prepfood(apple:0/20 pear:0/20 bread:0) rawfood(wheat:0/10 flour:0/10) minimums=apple:20+20 pear:20+20 wheat:10+10 flour:10 bread:10; use 'setup village' again after ticks to advance stone and dependency stages
+[TownsCLI] OK village setup queued at 180 43 11; accepted=16; orchard=30 tiles; storage=prepfood(apple:20 pear:20 bread:10),rawfood(wheat:10 flour:10)
+[TownsCLI] OK advanced 30000 ticks

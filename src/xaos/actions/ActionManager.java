@@ -72,6 +72,14 @@ public class ActionManager {
         return itemList.get(sID);
     }
 
+    public static HashMap<String, ActionManagerItem> getAllItems() {
+        if (itemList == null) {
+            loadItems();
+        }
+
+        return itemList;
+    }
+
     private static void loadXMLActions(String sPath, boolean bLoadingMain) {
         String sID = null;
         try {

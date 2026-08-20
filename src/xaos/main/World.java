@@ -1708,7 +1708,9 @@ public final class World implements Externalizable {
 			}
 
 			// Siege?
-			checkSiege (null);
+			if (!Game.isHostileMobsDisabled ()) {
+				checkSiege (null);
+			}
 
 			// Events
 			checkEvents ();
@@ -2773,6 +2775,9 @@ public final class World implements Externalizable {
 	 * Copia de checkSiege, pero sin miramientos.... función admin, mete la siege sin lanzar dados para ver si toca
 	 */
 	public void spawnSiege () {
+		if (Game.isHostileMobsDisabled ()) {
+			return;
+		}
 		int iNumTownies = getNumCitizens () + getNumSoldiers ();
 		if (iNumTownies == 0) {
 			return;
@@ -4437,6 +4442,23 @@ public final class World implements Externalizable {
 		}
 	}
 
+	/** Removes every hostile living currently present in this world. */
+	public int removeHostileMobs () {
+		ArrayList<LivingEntity> hostile = new ArrayList<LivingEntity> ();
+		hostile.addAll (getLivings (true).values ());
+		hostile.addAll (getLivings (false).values ());
+
+		int removed = 0;
+		for (LivingEntity living : hostile) {
+			LivingEntityManagerItem lemi = LivingEntityManager.getItem (living.getIniHeader ());
+			if (lemi != null && lemi.getType () == LivingEntity.TYPE_ENEMY) {
+				living.delete (false);
+				removed++;
+			}
+		}
+		return removed;
+	}
+
 
 	public static LivingEntity addNewLiving (String sIniHeader, int type, boolean bDiscovered, int x, int y, int z) {
 		return addNewLiving (sIniHeader, type, bDiscovered, x, y, z, false);
@@ -4444,6 +4466,9 @@ public final class World implements Externalizable {
 
 
 	public static LivingEntity addNewLiving (String sIniHeader, int type, boolean bDiscovered, int x, int y, int z, boolean bInit) {
+		if (type == LivingEntity.TYPE_ENEMY && Game.isHostileMobsDisabled ()) {
+			return null;
+		}
 		LivingEntity le;
 		LivingEntityManagerItem lemi = null;
 

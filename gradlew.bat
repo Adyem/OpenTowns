@@ -38,6 +38,11 @@ for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
+@rem Fall back to the installed JDK when JAVA_HOME is unset. This keeps the
+@rem wrapper usable in clean shells without requiring per-session setup.
+if not defined JAVA_HOME set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-25.0.3.9-hotspot"
+if not defined JAVA_TOOL_OPTIONS set "JAVA_TOOL_OPTIONS=-Djavax.net.ssl.trustStoreType=Windows-ROOT -Djavax.net.ssl.trustStore=NONE"
+
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome
 

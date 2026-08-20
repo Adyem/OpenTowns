@@ -1,0 +1,147 @@
+
+resume
+status
+livings
+cell 48 136 13
+order create-zone zpersonal 137 4 13 147 12 13
+order create-zone zdining 145 14 13 152 20 13
+stockpile rawfood 145 14 13 152 20 13
+order custom-action qharvestapple 110 1 13 180 60 13
+order custom-action qharvestpear 110 1 13 180 60 13
+zones
+stockpiles
+find item apple
+find item pear
+stockpile rawfood 153 14 13 158 20 13
+stockpiles
+stockpile rawmaterials 153 22 13 158 27 13
+order custom-action qchopfruittrees 135 1 13 170 45 13
+order custom-action qchop 135 1 13 170 45 13
+find item rmwood
+stockpiles
+order custom-action qtill 130 20 13 134 24 13
+order custom-action qtill 135 20 13 139 24 13
+order queue-place-area qappleseed 130 20 13 134 24 13
+order queue-place-area qpearseed 135 20 13 139 24 13
+tasks
+find item appleseed
+find item pearseed
+order custom-action qtill 130 20 13 131 21 13
+order queue-place-area qappleseed 130 20 13 131 21 13
+find item appleseed
+cell 130 20 13
+cell 138 22 13
+cell 135 10 13
+cell 135 15 13
+cell 135 25 13
+cell 142 20 13
+cell 145 20 13
+find item apple
+order custom-action qtill 142 20 13 145 21 13
+order queue-place-area qappleseed 142 20 13 145 21 13
+find item appleseed
+cell 142 20 13
+stockpiles
+find item apple
+find item pear
+order custom-action qharvestpapple 142 20 13 145 25 13
+order custom-action qharvestppear 138 20 13 141 25 13
+stockpiles
+find item apple
+find item pear
+cell 142 20 13
+cell 138 22 13
+stockpile prepfood 159 14 13 164 20 13
+stockpiles
+speed up
+speed up
+speed up
+status
+cell 142 20 13
+cell 138 22 13
+order delete-stockpile 2
+stockpile prepfood 153 14 13 158 20 13
+order custom-action qharvestpapple 142 20 13 145 25 13
+order custom-action qharvestppear 138 20 13 141 25 13
+stockpiles
+find item apple
+find item pear
+order delete-stockpile 5
+stockpiles
+mine-area 130 1 13 170 35 13
+status
+tasks
+find item rmstone
+find item rmwood
+order cancel-order 130 1 13 170 35 13
+order custom-action qharvestapple 145 14 13 165 35 13
+order custom-action qharvestpear 145 14 13 165 35 13
+order custom-action qharvestpapple 142 20 13 145 25 13
+order custom-action qharvestppear 138 20 13 141 25 13
+stockpiles
+find item apple
+find item pear
+cell 142 20 13
+cell 138 22 13
+status
+order custom-action qharvestapple 160 1 13 200 60 13
+order custom-action qharvestpear 160 1 13 200 60 13
+stockpiles
+find item apple
+find item pear
+order custom-action qharvestapple 160 1 13 190 55 13
+order custom-action qharvestpear 160 1 13 190 55 13
+stockpiles
+find item apple
+find item pear
+order custom-action qharvestapple 100 1 13 134 55 13
+order custom-action qharvestpear 100 1 13 134 55 13
+order custom-action qharvestwildwheat 100 1 13 134 55 13
+stockpiles
+find item apple
+find item pear
+find item wheat
+stockpile rawfood 153 8 13 158 13 13
+order custom-action qharvestwildwheat 100 1 13 134 55 13
+stockpiles
+find item wheat
+find item rmstone
+status
+order queue-place qcarpentrybench 146 5 13
+buildings
+find item carpentrybench
+stockpiles
+cell 146 5 13
+cell 147 5 13
+cell 148 5 13
+cell 149 5 13
+cell 150 5 13
+order queue-place qcarpentrybench 148 5 13
+find item rmwood
+tasks
+order custom-action qharvestwildwheat 100 1 13 134 55 13
+stockpiles
+find item wheat
+order custom-action qharvestwildwheat 0 1 13 99 55 13
+order custom-action qharvestapple 0 1 13 99 55 13
+order custom-action qharvestpear 0 1 13 99 55 13
+stockpiles
+find item wheat
+order custom-action qharvestapple 40 120 13 90 175 13
+find item apple
+order custom-action qharvestpear 40 120 13 90 175 13
+find item pear
+find item apple
+find item pear
+stockpiles
+find item apple
+find item pear
+stockpiles
+stockpile prepfood 140 24 13 146 30 13
+stockpiles
+find item corpse
+find item humanremains
+find item purgedhumanremains
+order destroy-entity 90 125 13
+order destroy-entity 125 66 13
+find item humanremains
